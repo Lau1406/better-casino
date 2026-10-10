@@ -4,13 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>BetterCasino</AssemblyName>
     <RootNamespace>BetterCasino</RootNamespace>
-    <Version>3.0.0</Version>
+    <Version>4.0.0</Version>
     <Authors>Zyhloh</Authors>
-    <Description>Better Casino mod for Schedule 1</Description>
+    <Description>Better Casino mod for Schedule I</Description>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <LibsDir>$(MSBuildProjectDirectory)\..\Libs</LibsDir>
+    <ModManagerDir>$(MSBuildProjectDirectory)\..\ModManager</ModManagerDir>
+    <DefaultItemExcludes>$(DefaultItemExcludes);GameDump\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -24,54 +27,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="MelonLoader">
-      <HintPath>..\Libs\net6\MelonLoader.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Il2Cppmscorlib">
-      <HintPath>..\Libs\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Il2CppInterop.Runtime">
-      <HintPath>..\Libs\net6\Il2CppInterop.Runtime.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\Libs\Il2CppAssemblies\UnityEngine.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Libs\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\Libs\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="0Harmony">
-      <HintPath>..\Libs\net6\0Harmony.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Il2CppFishNet.Runtime">
-      <HintPath>..\Libs\Il2CppAssemblies\Il2CppFishNet.Runtime.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\Libs\Il2CppAssemblies\Unity.TextMeshPro.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\Libs\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\Libs\Il2CppAssemblies\UnityEngine.PhysicsModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="ModManager&amp;PhoneApp">
-      <HintPath>..\ModManager\ModManager&amp;PhoneApp.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
+    <Reference Include="$(LibsDir)\net6\MelonLoader.dll" Private="false" />
+    <Reference Include="$(LibsDir)\net6\0Harmony.dll" Private="false" />
+    <Reference Include="$(LibsDir)\net6\Il2CppInterop.Runtime.dll" Private="false" />
+    <Reference Include="$(LibsDir)\Il2CppAssemblies\Il2Cppmscorlib.dll" Private="false" />
+    <Reference Include="$(LibsDir)\Il2CppAssemblies\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="$(LibsDir)\Il2CppAssemblies\UnityEngine.UI.dll" Private="false" />
+    <Reference Include="$(LibsDir)\Il2CppAssemblies\Unity.TextMeshPro.dll" Private="false" />
+    <Reference Include="$(LibsDir)\Il2CppAssemblies\Il2CppFishNet.Runtime.dll" Private="false" />
+    <Reference Include="$(LibsDir)\Il2CppAssemblies\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="$(ModManagerDir)\ModManager&amp;PhoneApp.dll" Private="false" />
   </ItemGroup>
 
 </Project>

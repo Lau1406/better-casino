@@ -1,106 +1,110 @@
-# Better Casino V3
+# Better Casino
 
-MelonLoader mod for Schedule 1 that overhauls the casino.
+A MelonLoader mod for **Schedule I** that overhauls the casino: bigger bets, configurable slot odds, a casino that never closes, and a safe place to lose the cops.
+
+[Download on Nexus Mods](https://www.nexusmods.com/schedule1/mods/1312) · Version 4.0.0
 
 ## Features
 
 ### Slot Machines
-- **Extended Bets** — Adds $1.5k, $3k, $5k, $10k, $25k, $50k, and $100k on top of the game's native bet amounts. No bets are removed.
-- **Free Play** — Toggle on a $0 bet option. Shows "FREE" on the machine display.
-- **Win Rate Override** — Set a custom Seven bias from 0% to 100%, or leave at -1 for default game odds. Host only.
-- **Anti-Exploit** — Configurable penalties for machine hopping and win streaks. Reduces effective win rate when players switch machines too fast or win too many in a row.
-- **Smart Labels** — Large bet amounts show as $5k, $100k etc. so the display doesn't break.
-
-### Table Games (Blackjack & Ride The Bus)
-- **Custom Bet Range** — Set your own min/max for both games. Default: $10 - $5,000.
-- **Slider Fix** — The bet slider actually maps to your configured range and the game accepts the full amount. No more $1k cap.
-
-### Always Open
-- **24/7 Casino** — The casino never closes. No more waiting for business hours.
-- **Updated Signs** — The "4PM-5AM" text on the casino signs changes to "OPEN 24/7".
-
-### Casino Safehouse
-- **Wanted Cleared** — Walk into the casino with any wanted level and it gets wiped. Pursuit level reset, crimes cleared, cops stop chasing.
-- **Toggleable** — Turn it off if you don't want the protection.
-
-## Mod Manager Integration
-
-Works with [Mod Manager & Phone App](https://www.nexusmods.com/schedule1/mods/397). All settings accessible from your in-game phone, changes apply immediately. Mod Manager is optional — without it, settings are in `UserData/MelonPreferences.cfg`.
-
-## Configuration
-
-Settings are in `UserData/MelonPreferences.cfg` under `[BetterCasino]`.
-
-### General
-| Setting | Default | Description |
-|---------|---------|-------------|
-| AlwaysOpen | true | Casino ignores business hours |
-| SignChangerEnabled | true | Enable sign text replacement |
-| SignText | OPEN 24/7 | Custom sign text |
-| CasinoSafehouse | true | Clear wanted on casino entry |
-
-### Slot Machines
-| Setting | Default | Description |
-|---------|---------|-------------|
-| SlotMachineEnabled | true | Enable slot machine tweaks |
-| FreePlay | false | Add $0 bet option |
-| SlotWinRate | -1 | Seven bias, -1 = default odds, 0.0-1.0 = custom (host only) |
-
-### Anti-Exploit
-| Setting | Default | Description |
-|---------|---------|-------------|
-| MultiMachinePenalty | 0.5 | Win rate reduction when hopping machines |
-| MultiMachineTimeWindow | 10 | Seconds before machine hop penalty resets |
-| WinStreakPenalty | 0.9 | Multiplier per win past threshold |
-| WinStreakThreshold | 3 | Consecutive wins before penalty kicks in |
+- **Bet ladder.** The game's own $5, $10, $25, $50, $100 continued in the same pattern up to $100k (250, 500, 1k, 2.5k, 5k ... 100k), trimmed to your own minimum and maximum.
+- **Compact labels.** Large bets show as `$2k`, `$100k` and auto-fit the machine display.
+- **Free play.** Optional `$0` bet for practice spins.
+- **Real win chance.** Set the percent chance that a spin pays out. Wins still use the game's own payout tiers (Jackpot 100×, Bells 25×, matching fruit 10×, mixed fruit 2×).
+- **Win penalties.** One switch turns on optional penalties for hopping between machines and for long win streaks.
 
 ### Table Games
+- **Custom bet limits** for Blackjack and Ride the Bus (default $10 – $5,000, the game caps at $1,000).
+- **Smart slider.** Bets snap to round amounts so you can actually land on $2,500 instead of $2,487.
+
+### Always Open
+- The casino stays open 24/7. Only the casino is affected. The Dark Market and other timed areas keep their normal hours.
+- The `4PM-5AM` sign is replaced with your own text (default `OPEN 24/7`) and restored if you turn it off.
+
+### Casino Safehouse
+- Your wanted level is cleared while you are inside the casino, with the same result as escaping the cops normally.
+
+## Settings
+
+Every setting can be changed in-game with [Mod Manager & Phone App](https://www.nexusmods.com/schedule1/mods/397), where each one has a description and changes apply instantly. Without it, edit `UserData/MelonPreferences.cfg`.
+
+Settings from 3.x are migrated automatically.
+
+#### `[BetterCasino]` General
 | Setting | Default | Description |
-|---------|---------|-------------|
-| TableGamesEnabled | true | Enable table game tweaks |
-| BlackjackMinBet | 10 | Blackjack minimum bet |
-| BlackjackMaxBet | 5000 | Blackjack maximum bet |
-| RTBMinBet | 10 | Ride The Bus minimum bet |
-| RTBMaxBet | 5000 | Ride The Bus maximum bet |
+|---|---|---|
+| `AlwaysOpen` | `true` | Keep the casino open around the clock |
+| `CasinoSafehouse` | `true` | Clear your wanted level inside the casino |
+| `SignChangerEnabled` | `true` | Replace the opening hours on the casino sign |
+| `SignText` | `OPEN 24/7` | Text shown on the sign |
+| `SlotMachineEnabled` | `true` | Enable slot machine tweaks |
+| `TableGamesEnabled` | `true` | Enable table game tweaks |
+
+#### `[BetterCasino_Slots]` Slot Machines
+| Setting | Default | Description |
+|---|---|---|
+| `FreePlay` | `false` | Add a `$0` bet (free spins never pay out) |
+| `LowerLimit` | `5` | Smallest bet on the ladder |
+| `UpperLimit` | `100000` | Largest bet on the ladder |
+
+#### `[BetterCasino_SlotsOdds]` Slot Machine Odds
+| Setting | Default | Description |
+|---|---|---|
+| `ChancePercent` | `-1` | Percent chance (0 – 100) that a spin pays out. `-1` keeps the game's odds (about 31%) |
+| `PenaltiesEnabled` | `false` | Turns on the hopping and streak penalties below |
+| `PenaltyHopPercent` | `50` | Win chance is cut by this percent right after switching machines |
+| `PenaltyHopSeconds` | `10` | Seconds the hopping penalty lasts |
+| `PenaltyStreakPercent` | `10` | Win chance drops by this percent for every win past the threshold |
+| `PenaltyStreakThreshold` | `3` | Wins in a row before the streak penalty starts |
+
+The odds settings only apply when `ChancePercent` is not `-1`, and the penalties only when `PenaltiesEnabled` is on.
+
+#### `[BetterCasino_Tables]` Table Games
+| Setting | Default | Description |
+|---|---|---|
+| `BlackjackLowerLimit` | `10` | Blackjack minimum bet |
+| `BlackjackUpperLimit` | `5000` | Blackjack maximum bet |
+| `RideTheBusLowerLimit` | `10` | Ride the Bus minimum bet |
+| `RideTheBusUpperLimit` | `5000` | Ride the Bus maximum bet |
 
 ## Multiplayer
 
-**Host only:** Win rate override, anti-exploit penalties, always-open state.
-
-**All players:** Bet ladder, display formatting, table game sliders, sign text, safehouse wanted clearing.
+Every feature runs on the player who has the mod. The slot win chance applies to the spins you start, so it works for clients as well as the host. Everyone at a slot machine should use the same slot settings. The machine syncs its bet *position*, so different ladders would show different amounts.
 
 ## Installation
 
-1. Install [MelonLoader](https://melonwiki.xyz/) (latest)
-2. Drop `BetterCasino.dll` into your `Mods` folder
-3. Launch the game — config generates on first run
-4. (Optional) Install [Mod Manager & Phone App](https://www.nexusmods.com/schedule1/mods/397) to change settings in-game
+1. Install [MelonLoader](https://melonwiki.xyz/) (0.7 or newer)
+2. Drop `BetterCasino.dll` into `Schedule I/Mods`
+3. Launch the game once to generate the config
+4. *(Optional)* Install [Mod Manager & Phone App](https://www.nexusmods.com/schedule1/mods/397) for in-game settings
 
-## Building from Source
+## Building
 
-Only the `src/` folder is included in this repo. The `libs/` folder containing MelonLoader and game assemblies is not included for obvious reasons.
+The project references MelonLoader and game assemblies from folders next to the repo, which are not included:
 
-To build:
+```
+Desktop/
+├── Better Casino/          (this repo)
+├── Libs/
+│   ├── net6/               ← <GameDir>/MelonLoader/net6/
+│   └── Il2CppAssemblies/   ← <GameDir>/MelonLoader/Il2CppAssemblies/
+└── ModManager/
+    └── ModManager&PhoneApp.dll
+```
 
-1. Install the game and [MelonLoader](https://melonwiki.xyz/) — run the game once so MelonLoader generates its assemblies
-2. Clone this repo
-3. Create a `libs/` folder next to `src/` with the following subfolders:
-   - `libs/net6/` — Copy from `<GameDir>/MelonLoader/net6/`
-   - `libs/Il2CppAssemblies/` — Copy from `<GameDir>/MelonLoader/Il2CppAssemblies/`
-4. (Optional) If building with Mod Manager support, place the `ModManager&PhoneApp.dll` in `libs/`
-5. Open `BetterCasino.sln` and build in Release, or run:
-   ```
-   dotnet build BetterCasino.sln --configuration Release
-   ```
-6. Output DLL will be at `src/bin/Release/net6.0/BetterCasino.dll`
+Run the game once with MelonLoader so it generates `Il2CppAssemblies`, then:
+
+```
+dotnet build BetterCasino.csproj -c Release
+```
+
+Output: `bin/Release/net6.0/BetterCasino.dll`
 
 ## Compatibility
 
-- MelonLoader (IL2CPP)
-- May conflict with other mods that modify `SlotMachine.BetAmounts` or casino access zones
+- MelonLoader 0.7+ (IL2CPP)
+- May conflict with other mods that change `SlotMachine.BetAmounts`, the casino bet panel, or `TimedAccessZone`
 
 ## Credits
 
-Created by **Zyhloh**
-
-Thanks to BorisJohnsonLies for the sign patch and free play ideas
+Created by **Zyhloh**. Thanks to BorisJohnsonLies for the sign patch and free play ideas.

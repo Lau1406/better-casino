@@ -1,55 +1,43 @@
-using MelonLoader;
+﻿using BetterCasino.Casino;
 using BetterCasino.Config;
 using BetterCasino.Features;
+using MelonLoader;
 
 namespace BetterCasino
 {
     public class Core : MelonMod
     {
+        private const string GameplayScene = "Main";
+
+        public static MelonLogger.Instance Log { get; private set; } = null!;
+
         public override void OnInitializeMelon()
         {
+            Log = LoggerInstance;
+
             Settings.Init();
-            ModManagerBridge.TryHook();
+            AlwaysOpen.Init();
+            SignChanger.Init();
+            SlotMachines.Init();
 
-            LoggerInstance.Msg("========================================");
-            LoggerInstance.Msg($"Better Casino v{Info.Version} loaded.");
-            LoggerInstance.Msg("========================================");
-
-            LoggerInstance.Msg($"[AlwaysOpen] {(Settings.AlwaysOpen.Value ? "ENABLED" : "DISABLED")}");
-
-            if (Settings.SlotMachineEnabled.Value)
-            {
-                LoggerInstance.Msg($"[SlotMachine] ENABLED | Bets: $100 - $100k | Free Play: {(Settings.FreePlay.Value ? "ON" : "OFF")}");
-                if (Settings.SlotWinRate.Value >= 0f)
-                    LoggerInstance.Msg($"[SlotMachine] Win Rate: {Settings.SlotWinRate.Value:P0} (HOST ONLY - requires being lobby host)");
-                else
-                    LoggerInstance.Msg("[SlotMachine] Win Rate: DEFAULT");
-            }
-            else
-                LoggerInstance.Msg("[SlotMachine] DISABLED");
-
-            if (Settings.TableGamesEnabled.Value)
-            {
-                LoggerInstance.Msg($"[Blackjack] ENABLED | Bets: ${Settings.BlackjackMinBet.Value}-${Settings.BlackjackMaxBet.Value}");
-                LoggerInstance.Msg($"[RideTheBus] ENABLED | Bets: ${Settings.RTBMinBet.Value}-${Settings.RTBMaxBet.Value}");
-            }
-            else
-                LoggerInstance.Msg("[TableGames] DISABLED");
-
-            LoggerInstance.Msg($"[Safehouse] {(Settings.CasinoSafehouse.Value ? "ENABLED" : "DISABLED")}");
-            LoggerInstance.Msg($"[SignChanger] {(Settings.SignChangerEnabled.Value ? "ENABLED - Text: " + Settings.SignText.Value : "DISABLED")}");
-            LoggerInstance.Msg("========================================");
+            Log.Msg($"Better Casino v{Info.Version} loaded.");
         }
 
-        public override void OnUpdate()
+        public override void OnLateInitializeMelon()
         {
-            SignChangerFeature.OnUpdate();
-            CasinoSafehouseFeature.OnUpdate();
+            Log.Msg(ModManagerBridge.Available
+                ? "Mod Manager detected, settings can be changed in-game."
+                : "Settings can be changed in UserData/MelonPreferences.cfg.");
         }
 
-        public override void OnDeinitializeMelon()
+        public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            LoggerInstance.Msg("Better Casino unloaded.");
+            CasinoLocator.Reset();
+            SignChanger.OnSceneLoaded(sceneName == GameplayScene);
         }
+
+        public override void OnUpdate() => Safehouse.Tick();
+
+        public override void OnLateUpdate() => TableGames.LateTick();
     }
 }
