@@ -34,6 +34,11 @@ namespace BetterCasino.Config
         public static MelonPreferences_Entry<int> RideTheBusLowerLimit = null!;
         public static MelonPreferences_Entry<int> RideTheBusUpperLimit = null!;
 
+        public static MelonPreferences_Entry<int> RtbRedOrBlackChance = null!;
+        public static MelonPreferences_Entry<int> RtbHigherOrLowerChance = null!;
+        public static MelonPreferences_Entry<int> RtbInsideOrOutsideChance = null!;
+        public static MelonPreferences_Entry<int> RtbSuitChance = null!;
+
         private static readonly List<(MelonPreferences_Entry Lower, MelonPreferences_Entry Upper)> Ranges = new();
 
         public static bool OddsOverridden => SlotMachines.Value && WinChance.Value >= 0;
@@ -52,7 +57,7 @@ namespace BetterCasino.Config
             SlotMachines = general.CreateEntry("SlotMachineEnabled", true, "Slot Machine Tweaks",
                 "Enables the custom bet ladder and odds for slot machines.");
             TableGames = general.CreateEntry("TableGamesEnabled", true, "Table Game Tweaks",
-                "Enables custom bet limits for Blackjack and Ride the Bus.");
+                "Enables custom bet limits for Blackjack and Ride the Bus, and the Ride the Bus odds.");
 
             var slots = MelonPreferences.CreateCategory("BetterCasino_Slots", "Slot Machines");
             FreePlay = slots.CreateEntry("FreePlay", false, "Free Play",
@@ -91,6 +96,20 @@ namespace BetterCasino.Config
             RideTheBusUpperLimit = tables.CreateEntry("RideTheBusUpperLimit", 5000, "Ride the Bus Maximum Bet",
                 "Largest bet allowed at the Ride the Bus table.", validator: new ValueRange<int>(1, BetCeiling));
 
+            var rtbOdds = MelonPreferences.CreateCategory("BetterCasino_RideTheBusOdds", "Ride the Bus Odds");
+            RtbRedOrBlackChance = rtbOdds.CreateEntry("RedOrBlackChancePercent", -1, "Red or Black Chance (%)",
+                "Percent chance that the Red or Black guess is correct, 0 to 100. -1 keeps the game's own odds.",
+                validator: new ValueRange<int>(-1, 100));
+            RtbHigherOrLowerChance = rtbOdds.CreateEntry("HigherOrLowerChancePercent", -1, "Higher or Lower Chance (%)",
+                "Percent chance that the Higher or Lower guess is correct, 0 to 100. -1 keeps the game's own odds.",
+                validator: new ValueRange<int>(-1, 100));
+            RtbInsideOrOutsideChance = rtbOdds.CreateEntry("InsideOrOutsideChancePercent", -1, "Inside or Outside Chance (%)",
+                "Percent chance that the Inside or Outside guess is correct, 0 to 100. -1 keeps the game's own odds.",
+                validator: new ValueRange<int>(-1, 100));
+            RtbSuitChance = rtbOdds.CreateEntry("SuitChancePercent", -1, "Suit Chance (%)",
+                "Percent chance that the Suit guess is correct, 0 to 100. -1 keeps the game's own odds.",
+                validator: new ValueRange<int>(-1, 100));
+
             Ranges.Add((SlotLowerLimit, SlotUpperLimit));
             Ranges.Add((BlackjackLowerLimit, BlackjackUpperLimit));
             Ranges.Add((RideTheBusLowerLimit, RideTheBusUpperLimit));
@@ -100,7 +119,7 @@ namespace BetterCasino.Config
             foreach (var range in Ranges)
                 FixRange(range.Lower, range.Upper);
 
-            foreach (var category in new[] { general, slots, odds, tables })
+            foreach (var category in new[] { general, slots, odds, tables, rtbOdds })
                 foreach (var entry in category.Entries)
                     entry.OnEntryValueChangedUntyped.Subscribe((_, _) => OnEntryChanged(entry));
 
