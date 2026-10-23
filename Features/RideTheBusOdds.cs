@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BetterCasino.Config;
 using HarmonyLib;
 using Il2CppScheduleOne.Casino;
-using MelonLoader;
 using Card = Il2CppScheduleOne.Casino.PlayingCard.CardData;
 using Random = System.Random;
 using Stage = Il2CppScheduleOne.Casino.RTBGameController.EStage;
@@ -20,15 +19,6 @@ namespace BetterCasino.Features
 
         private static Card? _swapFrom;
         private static Card _swapTo;
-
-        private static MelonPreferences_Entry<int>? ChanceFor(Stage stage) => stage switch
-        {
-            Stage.RedOrBlack => Settings.RtbRedOrBlackChance,
-            Stage.HigherOrLower => Settings.RtbHigherOrLowerChance,
-            Stage.InsideOrOutside => Settings.RtbInsideOrOutsideChance,
-            Stage.Suit => Settings.RtbSuitChance,
-            _ => null
-        };
 
         private static bool Same(Card a, Card b) => a.Suit == b.Suit && a.Value == b.Value;
 
@@ -87,7 +77,7 @@ namespace BetterCasino.Features
             return found;
         }
 
-        private static Card Choose(RTBGameController game, Stage stage, Card drawn, float answer, float chance)
+        private static Card Choose(RTBGameController game, Stage stage, Card drawn, float answer, float multiplier)
         {
             var deck = game.cardsInDeck;
             var drawnCards = game.drawnCards;
@@ -107,6 +97,7 @@ namespace BetterCasino.Features
 
             if (slot >= 0) drawnCards![slot] = drawn;
 
+            var chance = Math.Clamp((float)wins.Count / candidates.Count * multiplier, 0f, 1f);
             var pool = Rng.NextDouble() < chance ? wins : losses;
             if (pool.Count == 0 || pool.Exists(c => Same(c, drawn))) return drawn;
             return pool[Rng.Next(pool.Count)];
@@ -153,8 +144,8 @@ namespace BetterCasino.Features
             {
                 if (_evaluating || !Settings.TableGames.Value) return true;
 
-                var chance = ChanceFor(stage);
-                if (chance == null || chance.Value < 0) return true;
+                var multiplier = Settings.RtbWinMultiplier.Value;
+                if (stage == Stage.WaitingForPlayers || Math.Abs(multiplier - 1f) < 0.001f) return true;
 
                 // Only the machine that drew the card (the host) has it missing from its deck.
                 var deck = __instance.cardsInDeck;
@@ -162,7 +153,7 @@ namespace BetterCasino.Features
 
                 if (!TryGetSharedAnswer(__instance, stage, out var answer)) return true;
 
-                var chosen = Choose(__instance, stage, card, answer, chance.Value / 100f);
+                var chosen = Choose(__instance, stage, card, answer, multiplier);
                 if (!Same(chosen, card)) Swap(__instance, card, chosen);
 
                 __result = Evaluate(__instance, stage, chosen);

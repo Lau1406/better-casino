@@ -34,10 +34,7 @@ namespace BetterCasino.Config
         public static MelonPreferences_Entry<int> RideTheBusLowerLimit = null!;
         public static MelonPreferences_Entry<int> RideTheBusUpperLimit = null!;
 
-        public static MelonPreferences_Entry<int> RtbRedOrBlackChance = null!;
-        public static MelonPreferences_Entry<int> RtbHigherOrLowerChance = null!;
-        public static MelonPreferences_Entry<int> RtbInsideOrOutsideChance = null!;
-        public static MelonPreferences_Entry<int> RtbSuitChance = null!;
+        public static MelonPreferences_Entry<float> RtbWinMultiplier = null!;
 
         private static readonly List<(MelonPreferences_Entry Lower, MelonPreferences_Entry Upper)> Ranges = new();
 
@@ -97,18 +94,9 @@ namespace BetterCasino.Config
                 "Largest bet allowed at the Ride the Bus table.", validator: new ValueRange<int>(1, BetCeiling));
 
             var rtbOdds = MelonPreferences.CreateCategory("BetterCasino_RideTheBusOdds", "Ride the Bus Odds");
-            RtbRedOrBlackChance = rtbOdds.CreateEntry("RedOrBlackChancePercent", -1, "Red or Black Chance (%)",
-                "Percent chance that the Red or Black guess is correct, 0 to 100. -1 keeps the game's own odds.",
-                validator: new ValueRange<int>(-1, 100));
-            RtbHigherOrLowerChance = rtbOdds.CreateEntry("HigherOrLowerChancePercent", -1, "Higher or Lower Chance (%)",
-                "Percent chance that the Higher or Lower guess is correct, 0 to 100. -1 keeps the game's own odds.",
-                validator: new ValueRange<int>(-1, 100));
-            RtbInsideOrOutsideChance = rtbOdds.CreateEntry("InsideOrOutsideChancePercent", -1, "Inside or Outside Chance (%)",
-                "Percent chance that the Inside or Outside guess is correct, 0 to 100. -1 keeps the game's own odds.",
-                validator: new ValueRange<int>(-1, 100));
-            RtbSuitChance = rtbOdds.CreateEntry("SuitChancePercent", -1, "Suit Chance (%)",
-                "Percent chance that the Suit guess is correct, 0 to 100. -1 keeps the game's own odds.",
-                validator: new ValueRange<int>(-1, 100));
+            RtbWinMultiplier = rtbOdds.CreateEntry("WinChanceMultiplier", 1f, "Win Chance Multiplier",
+                "Multiplies the chance that each guess is correct, 0 to 2. 1 keeps the game's own odds, 2 makes a win twice as likely.",
+                validator: new ValueRange<float>(0f, 2f));
 
             Ranges.Add((SlotLowerLimit, SlotUpperLimit));
             Ranges.Add((BlackjackLowerLimit, BlackjackUpperLimit));
