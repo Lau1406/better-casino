@@ -16,7 +16,7 @@ A MelonLoader mod for **Schedule I** that overhauls the casino: bigger bets, con
 ### Table Games
 - **Custom bet limits** for Blackjack and Ride the Bus (default $10 – $5,000, the game caps at $1,000).
 - **Smart slider.** Bets snap to round amounts so you can actually land on $2,500 instead of $2,487.
-- **Ride the Bus odds.** One multiplier for the chance that each guess is correct. `2` makes a 50% Red or Black guess a sure win and a 25% Suit guess 50%.
+- **Ride the Bus odds.** One multiplier for the chance that each guess is correct. `200` makes a 50% Red or Black guess a sure win and a 25% Suit guess 50%.
 
 ### Always Open
 - The casino stays open 24/7. Only the casino is affected. The Dark Market and other timed areas keep their normal hours.
@@ -71,9 +71,9 @@ The odds settings only apply when `ChancePercent` is not `-1`, and the penalties
 #### `[BetterCasino_RideTheBusOdds]` Ride the Bus Odds
 | Setting | Default | Description |
 |---|---|---|
-| `WinChanceMultiplier` | `1` | Multiplies the chance (0 – 2) that each guess is correct. `1` keeps the game's odds |
+| `WinChanceMultiplierPercent` | `100` | Multiplies the chance (0 – 200) that each guess is correct. `100` keeps the game's odds |
 
-The normal chance is worked out from the cards left in the deck, multiplied, and capped at 100%. For example, a guess that would normally win 40% of the time wins 60% at `1.5`. If no remaining card can give the rolled result, the game's own draw is kept. Needs `TableGamesEnabled`.
+The normal chance is worked out from the cards left in the deck, multiplied, and capped at 100%. For example, a guess that would normally win 40% of the time wins 60% at `150`. If no remaining card can give the rolled result, the game's own draw is kept. Needs `TableGamesEnabled`.
 
 ## Multiplayer
 

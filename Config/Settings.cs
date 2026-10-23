@@ -34,7 +34,7 @@ namespace BetterCasino.Config
         public static MelonPreferences_Entry<int> RideTheBusLowerLimit = null!;
         public static MelonPreferences_Entry<int> RideTheBusUpperLimit = null!;
 
-        public static MelonPreferences_Entry<float> RtbWinMultiplier = null!;
+        public static MelonPreferences_Entry<int> RtbWinMultiplier = null!;
 
         private static readonly List<(MelonPreferences_Entry Lower, MelonPreferences_Entry Upper)> Ranges = new();
 
@@ -94,9 +94,9 @@ namespace BetterCasino.Config
                 "Largest bet allowed at the Ride the Bus table.", validator: new ValueRange<int>(1, BetCeiling));
 
             var rtbOdds = MelonPreferences.CreateCategory("BetterCasino_RideTheBusOdds", "Ride the Bus Odds");
-            RtbWinMultiplier = rtbOdds.CreateEntry("WinChanceMultiplier", 1f, "Win Chance Multiplier",
-                "Multiplies the chance that each guess is correct, 0 to 2. 1 keeps the game's own odds, 2 makes a win twice as likely.",
-                validator: new ValueRange<float>(0f, 2f));
+            RtbWinMultiplier = rtbOdds.CreateEntry("WinChanceMultiplierPercent", 100, "Win Chance Multiplier (%)",
+                "Multiplies the chance that each guess is correct, 0 to 200. 100 keeps the game's own odds, 200 makes a win twice as likely.",
+                validator: new ValueRange<int>(0, 200));
 
             Ranges.Add((SlotLowerLimit, SlotUpperLimit));
             Ranges.Add((BlackjackLowerLimit, BlackjackUpperLimit));

@@ -144,8 +144,8 @@ namespace BetterCasino.Features
             {
                 if (_evaluating || !Settings.TableGames.Value) return true;
 
-                var multiplier = Settings.RtbWinMultiplier.Value;
-                if (stage == Stage.WaitingForPlayers || Math.Abs(multiplier - 1f) < 0.001f) return true;
+                var multiplier = Settings.RtbWinMultiplier.Value / 100f;
+                if (stage == Stage.WaitingForPlayers || Settings.RtbWinMultiplier.Value == 100) return true;
 
                 // Only the machine that drew the card (the host) has it missing from its deck.
                 var deck = __instance.cardsInDeck;
